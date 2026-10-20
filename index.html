@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Games Ltd | iOS Game Development Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Variables & Game Studio Dark Theme --- */
+        :root {
+            --bg-main: #05050a;
+            --bg-surface: #0d0d16;
+            --bg-card: #151522;
+            --color-primary: #10b981; /* Electric Green */
+            --color-primary-glow: rgba(16, 185, 129, 0.3);
+            --color-secondary: #3b82f6; /* Action Blue */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --radius-lg: 16px;
+            --radius-sm: 8px;
+            --max-width: 1100px;
+            --transition-speed: 0.3s;
+        }
+
+        /* --- Global Resets & Typography --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-main);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+        }
+
+        h1, h2, h3, h4, h5 {
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .cite-ref {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            vertical-align: super;
+            margin-left: 2px;
+            user-select: none;
+        }
+
+        /* --- Utility Classes --- */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-padding {
+            padding: 140px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* --- Header Navigation --- */
+        .navbar {
+            background-color: rgba(5, 5, 10, 0.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .brand-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+        }
+
+        .brand-logo svg {
+            color: var(--color-primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-menu a {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-menu a:hover {
+            color: var(--text-main);
+        }
+
+        /* --- 1. Hero Section --- */
+        .hero {
+            padding-top: 180px;
+            padding-bottom: 120px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 36px;
+            background: var(--color-primary);
+            color: #000;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px var(--color-primary-glow);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #34d399;
+            box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
+        }
+
+        /* --- 2. About Section --- */
+        .about-section {
+            background-color: var(--bg-surface);
+        }
+
+        .about-card {
+            background: var(--bg-card);
+            padding: 60px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .about-card strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* --- 3. Services --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .service-box {
+            background: var(--bg-card);
+            padding: 50px 40px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .service-box:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            background: #1c1c2b;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--color-primary);
+            margin-bottom: 24px;
+        }
+
+        .service-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .service-box h3 {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .service-box p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- 4. Contact Section --- */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .form-area {
+            padding: 60px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color var(--transition-speed) ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--color-primary);
+            color: #000;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 100%;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .submit-btn:hover {
+            background: #34d399;
+        }
+
+        .info-area {
+            background: rgba(16, 185, 129, 0.05);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-item {
+            margin-bottom: 32px;
+        }
+
+        .info-item h4 {
+            color: var(--color-primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .info-item p, .info-item a {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .info-item a:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--bg-main);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 60px 0 40px;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3.5rem; }
+            .contact-layout { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="#" class="brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                ZOOM GAMES
+            </a>
+            <nav class="nav-menu">
+                <a href="#about">Studio Profile</a>
+                <a href="#services">Software Engineering</a>
+                <a href="#contact">Developer Connect</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>Accelerating mobile<br>entertainment.</h1>
+            <p>ZOOM GAMES LTD<span class="cite-ref">[cite: 16]</span> is a UK-based interactive studio specializing in premium iOS game development, custom software engineering, and digital systems design.</p>
+            <a href="#contact" class="btn-primary">Initialize Project</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section-padding about-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Mission.</h2>
+                <p class="section-subtitle">Bridging creative gameplay with robust system architectures.</p>
+            </div>
+            <div class="about-card">
+                Headquartered in COBHAM, England<span class="cite-ref">[cite: 16]</span>, <strong>ZOOM GAMES LTD</strong><span class="cite-ref">[cite: 16]</span> operates as a premier interactive digital product studio. Operating robustly within the Computer Systems Design and Related Services sector<span class="cite-ref">[cite: 16]</span>, we engineer high-performance mobile games and interactive entertainment applications. Our unique approach seamlessly integrates Custom computer programming<span class="cite-ref">[cite: 16]</span> with advanced technical frameworks, allowing us to build reliable digital platforms from initial conceptualization to final App Store deployment. We ensure every line of code serves to create a seamless, frictionless user experience.
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section-padding" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technical Capabilities.</h2>
+                <p class="section-subtitle">A comprehensive suite of system design and programming services.</p>
+            </div>
+            
+            <div class="services-grid">
+                <!-- Service 1 -->
+                <div class="service-box">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                            <circle cx="6" cy="12" r="1"></circle>
+                            <circle cx="10" cy="12" r="1"></circle>
+                            <circle cx="14" cy="12" r="1"></circle>
+                            <circle cx="18" cy="12" r="1"></circle>
+                        </svg>
+                    </div>
+                    <h3>Native iOS Game Development</h3>
+                    <p>We craft immersive interactive applications specifically optimized for the Apple ecosystem. Our internal engineering teams develop robust games, maintaining strict adherence to App Store review guidelines and maximizing hardware performance metrics.</p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-box">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Custom Computer Programming</h3>
+                    <p>Executing our mandate in Custom computer programming<span class="cite-ref">[cite: 16]</span>, we write highly efficient, scalable codebases. We prioritize clean architecture, ensuring that our complex interactive systems are bug-free, maintainable, and highly responsive.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-box">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                            <rect x="9" y="9" width="6" height="6"></rect>
+                            <line x1="9" y1="1" x2="9" y2="4"></line>
+                            <line x1="15" y1="1" x2="15" y2="4"></line>
+                            <line x1="9" y1="20" x2="9" y2="23"></line>
+                            <line x1="15" y1="20" x2="15" y2="23"></line>
+                            <line x1="20" y1="9" x2="23" y2="9"></line>
+                            <line x1="20" y1="14" x2="23" y2="14"></line>
+                            <line x1="1" y1="9" x2="4" y2="9"></line>
+                            <line x1="1" y1="14" x2="4" y2="14"></line>
+                        </svg>
+                    </div>
+                    <h3>Computer Systems Design</h3>
+                    <p>As a provider of Computer Systems Design and Related Services<span class="cite-ref">[cite: 16]</span>, we construct the backend infrastructures required to support multiplayer capabilities, real-time data synchronization, and cloud scalability for our titles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section-padding" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Developer Support.</h2>
+                <p class="section-subtitle">Initiate a dialogue regarding game development, custom programming, or technical consulting.</p>
+            </div>
+            
+            <div class="contact-layout">
+                <!-- Contact Form -->
+                <div class="form-area">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="name">Organization / Publisher Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Contact Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Software Project Details</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Transmit Request</button>
+                    </form>
+                </div>
+
+                <!-- Contacts Info -->
+                <div class="info-area">
+                    <div class="info-item">
+                        <h4>Studio Headquarters</h4>
+                        <p>17 Eaton Park Road<br>COBHAM, England, KT11 2JJ<span class="cite-ref">[cite: 16]</span><br>United Kingdom<span class="cite-ref">[cite: 16]</span></p>
+                    </div>
+
+                    <div class="info-item">
+                        <h4>Digital Comm Node</h4>
+                        <a href="mailto:admin@zoomgames.site">admin@zoomgames.site</a>
+                    </div>
+
+                    <div class="info-item">
+                        <h4>Technical Support Line</h4>
+                        <p>+44-7809247393<span class="cite-ref">[cite: 16]</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ZOOM GAMES LTD. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
